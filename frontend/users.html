@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users List</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="container mt-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Users</h2>
+
+            <a href="index.html" class="btn btn-primary">
+                Add User
+            </a>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="userTableBody">
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <script>
+
+        async function loadUsers() {
+
+            try {
+
+                const response = await fetch(
+                    "http://localhost:9090/api/users"
+                );
+
+                const users = await response.json();
+
+                const tbody = document.getElementById(
+                    "userTableBody"
+                );
+
+                tbody.innerHTML = "";
+
+                users.forEach(user => {
+
+                    tbody.innerHTML += `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.fname ?? ""}</td>
+                    <td>${user.lname ?? ""}</td>
+                    <td>${user.email ?? ""}</td>
+                    <td>${user.role ?? ""}</td>
+                    <td>${user.createdAt ?? ""}</td>
+                    <td>
+                        <a
+        href="edit-user.html?id=${user.id}"
+        class="btn btn-warning btn-sm">
+        Edit
+    </a>
+    <button
+        class="btn btn-danger btn-sm"
+        onclick="deleteUser(${user.id})">
+        Delete
+    </button>
+</td>
+                </tr>
+            `;
+
+                });
+
+            }
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Failed to load users."
+                );
+
+            }
+
+        }
+
+        loadUsers();
+
+        async function deleteUser(id) {
+
+            if (!confirm("Delete this user?")) {
+                return;
+            }
+
+            try {
+
+                const response = await fetch(
+                    `http://localhost:9090/api/users/${id}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                const message = await response.text();
+
+                alert(message);
+
+                loadUsers();
+
+            }
+            catch (error) {
+
+                console.error(error);
+
+                alert("Delete failed.");
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
