@@ -1,6 +1,7 @@
 package com.aarooshi.taskmanager.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -83,4 +84,7 @@ public class User {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<Project> projects; //similar to HasMany in Laravel. One User can have multiple Projects.
 }

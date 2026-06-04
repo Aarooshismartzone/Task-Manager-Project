@@ -11,20 +11,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aarooshi.taskmanager.entity.User;
-import com.aarooshi.taskmanager.repository.UserRepository;
+//import com.aarooshi.taskmanager.repository.UserRepository;
 import com.aarooshi.taskmanager.service.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
-@CrossOrigin(origins = "*") //temporarily give cors access to any site
+@CrossOrigin(origins = "*") // temporarily give cors access to any site
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    @Autowired
-    //private UserRepository userRepository;
-    private UserService userService; //MOVING TO SERVICE PAGE
+    // @Autowired
+
+    /*
+     * Autowired is commented out because constructor injection is used
+     * Using constructor injection instead of field injection (@Autowired).
+     * The controller now depends on UserService rather than UserRepository.
+     */
+
+    // private UserRepository userRepository;
+    private final UserService userService; // MOVING TO SERVICE PAGE
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping // the url /api/users is called under GET method
     public List<User> getUsers() {
