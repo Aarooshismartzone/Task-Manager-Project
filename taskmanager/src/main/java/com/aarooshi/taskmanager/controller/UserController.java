@@ -2,13 +2,16 @@ package com.aarooshi.taskmanager.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.aarooshi.taskmanager.entity.User;
 //import com.aarooshi.taskmanager.repository.UserRepository;
@@ -63,6 +66,15 @@ public class UserController {
         userService.deleteUser(id);
 
         return "User Deleted Successfully";
+    }
+
+    // uploads
+    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public User uploadUserImage(
+            @PathVariable Long id,
+            @RequestParam("image") MultipartFile image) {
+
+        return userService.uploadUserImage(id, image);
     }
 }
 
